@@ -6,387 +6,369 @@
     <title>豹纹守宫AI饲养专家 - 智能诊断系统</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #F0F2F5;
             height: 100vh;
             color: #333;
             overflow: hidden;
         }
+        
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 0;
             display: flex;
             flex-direction: column;
             height: 100vh;
+            background: #F0F2F5;
         }
         
+        /* ========== 顶栏 ========== */
         .header {
-            text-align: center;
-            padding: 15px 20px;
-            background: #fff;
-            border-bottom: 1px solid #e0e0e0;
-            flex-shrink: 0;
-        }
-        .header h1 {
-            font-size: 20px;
-            margin-bottom: 5px;
-            color: #2e7d32;
-        }
-        .header p { color: #666; font-size: 12px; }
-        .badge {
-            display: inline-block;
-            background: #4caf50;
+            background: linear-gradient(135deg, #1A2A3A 0%, #2C3E50 100%);
             color: #fff;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            margin-top: 5px;
-        }
-        
-        /* 隐藏调试元素 */
-        .demo-controls,
-        .info-section,
-        .stats-section {
-            display: none !important;
-        }
-        
-        .chat-section {
-            background: #f5f5f5;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            overflow: hidden;
-        }
-        .chat-header {
-            padding: 12px 16px;
-            background: #fff;
-            border-bottom: 1px solid #e0e0e0;
+            padding: 14px 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            position: relative;
             flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
-        .avatar {
-            width: 36px; height: 36px; border-radius: 50%;
-            background: linear-gradient(135deg, #4caf50, #2e7d32);
-            display: flex; align-items: center; justify-content: center;
+        
+        .header h1 {
             font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
-        .chat-header h3 { font-size: 15px; color: #333; }
-        .online { font-size: 12px; color: #4caf50; margin-left: auto; }
+        
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #4ADE80;
+            margin-left: 12px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ADE80;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #4ADE80;
+        }
+        
+        /* 信息按钮 */
+        .info-btn {
+            position: absolute;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        
+        .info-btn:hover { background: rgba(255,255,255,0.25); }
+        
+        /* ========== 聊天区域 ========== */
+        .chat-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
         
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: 16px 20px;
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
+        
+        /* ========== 消息气泡 ========== */
         .message {
-            max-width: 85%;
+            max-width: 80%;
             padding: 12px 16px;
-            border-radius: 16px;
-            line-height: 1.6;
-            font-size: 14px;
+            border-radius: 18px;
+            line-height: 1.5;
+            font-size: 15px;
+            word-wrap: break-word;
+            animation: messageAppear 0.3s ease-out;
         }
+        
+        @keyframes messageAppear {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .message.user {
             align-self: flex-end;
             background: #fff;
-            border: 1px solid #e0e0e0;
             color: #333;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-bottom-right-radius: 4px;
         }
+        
         .message.ai {
             align-self: flex-start;
-            background: #e8f5e9;
-            color: #1b5e20;
+            background: #E8F5E9;
+            color: #1B5E20;
+            border-bottom-left-radius: 4px;
         }
-        .message.critical {
-            background: #ffebee;
-            border: 1px solid #ef5350;
-            color: #c62828;
-        }
-        .message.warning {
-            background: #fff3e0;
-            border: 1px solid #ff9800;
-            color: #e65100;
-        }
-        .msg-title { font-weight: bold; margin-bottom: 8px; font-size: 15px; }
-        .msg-section { margin: 8px 0; }
-        .msg-section-title { color: #2e7d32; font-weight: bold; }
         
+        .message.critical {
+            background: #FFEBEE;
+            color: #C62828;
+            border: 1px solid #EF9A9A;
+        }
+        
+        .message.warning {
+            background: #FFF3E0;
+            color: #E65100;
+            border: 1px solid #FFCC80;
+        }
+        
+        .msg-title { font-weight: 600; margin-bottom: 8px; font-size: 16px; }
+        .msg-section { margin: 8px 0; }
+        .msg-section-title { color: #2E7D32; font-weight: 600; }
+        
+        /* ========== 输入区域 ========== */
         .chat-input {
-            padding: 12px 16px;
+            padding: 12px 16px 20px;
             background: #fff;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid #E0E0E0;
             flex-shrink: 0;
         }
+        
         .quick-replies {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 10px;
-        }
-        .quick-btn {
-            padding: 6px 12px;
-            background: #e8f5e9;
-            border: 1px solid #c8e6c9;
-            border-radius: 16px;
-            color: #2e7d32;
-            font-size: 12px;
-            cursor: pointer;
-        }
-        .quick-btn:hover { background: #c8e6c9; }
-        .input-area {
-            display: flex;
-            gap: 10px;
-        }
-        .input-area input {
-            flex: 1;
-            padding: 12px 16px;
-            background: #f5f5f5;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            color: #333;
-            font-size: 14px;
-            outline: none;
-        }
-        .input-area input:focus {
-            border-color: #4caf50;
-        }
-        .input-area button {
-            padding: 12px 24px;
-            background: #4caf50;
-            border: none;
-            border-radius: 20px;
-            color: #fff;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .input-area button:hover { background: #43a047; }
-        
-        .info-section {
-            display: none;
-        }
-        .info-header {
-            display: none;
-        }
-        .info-tab {
-            display: none;
-        }
-        .stats-section {
-            display: none;
-        }
-        .stat-card {
-            display: none;
-        }
-        .disclaimer {
-            display: none;
+            margin-bottom: 12px;
+            padding: 0 4px;
         }
         
-        .chat-section {
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            flex-direction: column;
-            height: 700px;
-        }
-        .chat-header {
-            padding: 15px 20px;
-            background: rgba(0,0,0,0.2);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .avatar {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: linear-gradient(135deg, #f4a261, #e76f51);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px;
-        }
-        .chat-header h3 { font-size: 16px; }
-        .online { font-size: 12px; color: #10b981; margin-left: auto; }
-        
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .message {
-            max-width: 90%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            line-height: 1.6;
-            font-size: 14px;
-        }
-        .message.user {
-            align-self: flex-end;
-            background: #3b82f6;
-        }
-        .message.ai {
-            align-self: flex-start;
-            background: rgba(255,255,255,0.1);
-        }
-        .message.critical {
-            background: linear-gradient(135deg, #dc2626, #991b1b);
-            border: 2px solid #fca5a5;
-            animation: pulse 2s infinite;
-        }
-        .message.warning {
-            background: linear-gradient(135deg, #d97706, #92400e);
-            border: 2px solid #fcd34d;
-        }
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
-        }
-        .msg-title { font-weight: bold; margin-bottom: 8px; font-size: 15px; }
-        .msg-section { margin: 8px 0; }
-        .msg-section-title { color: #f4a261; font-weight: bold; }
-        
-        .chat-input {
-            padding: 15px 20px;
-            background: rgba(0,0,0,0.2);
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        .quick-replies {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
         .quick-btn {
             padding: 8px 14px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            color: #fff;
+            background: #F5F5F5;
+            border: 1px solid #E0E0E0;
+            border-radius: 16px;
+            color: #555;
             font-size: 13px;
             cursor: pointer;
+            transition: all 0.2s;
         }
-        .quick-btn:hover { background: rgba(255,255,255,0.2); }
+        
+        .quick-btn:hover { 
+            background: #E8F5E9; 
+            border-color: #A5D6A7;
+            color: #2E7D32;
+        }
+        
         .input-area {
             display: flex;
             gap: 10px;
+            align-items: center;
         }
+        
         .input-area input {
             flex: 1;
-            padding: 12px 16px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 14px;
+            padding: 12px 18px;
+            background: #F5F5F5;
+            border: 1px solid #E0E0E0;
+            border-radius: 24px;
+            color: #333;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
+        
+        .input-area input::placeholder {
+            color: #9E9E9E;
+        }
+        
+        .input-area input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        
         .input-area button {
             padding: 12px 24px;
-            background: linear-gradient(135deg, #f4a261, #e76f51);
+            background: #4CAF50;
             border: none;
-            border-radius: 8px;
+            border-radius: 24px;
             color: #fff;
-            font-weight: bold;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
         }
         
-        .info-section {
-            background: rgba(255,255,255,0.05);
+        .input-area button:hover { background: #43A047; }
+        .input-area button:active { transform: scale(0.96); }
+        
+        /* ========== 模态框 ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal-overlay.active { display: flex; }
+        
+        .modal-content {
+            background: #fff;
             border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            flex-direction: column;
-            height: 700px;
-        }
-        .info-header {
-            padding: 15px 20px;
-            background: rgba(0,0,0,0.2);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            gap: 10px;
-        }
-        .info-tab {
-            padding: 8px 16px;
-            background: rgba(255,255,255,0.1);
-            border: none;
-            border-radius: 6px;
-            color: #fff;
-            cursor: pointer;
-            font-size: 13px;
-        }
-        .info-tab.active { background: #3b82f6; }
-        .info-content {
-            flex: 1;
+            max-width: 480px;
+            width: 100%;
+            max-height: 80vh;
             overflow-y: auto;
-            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalAppear 0.3s ease-out;
         }
-        .info-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 12px;
-            border-left: 3px solid #64748b;
-        }
-        .info-card.critical { border-left-color: #dc2626; background: rgba(220,38,38,0.1); }
-        .info-card.warning { border-left-color: #d97706; background: rgba(217,119,6,0.1); }
-        .info-card.success { border-left-color: #10b981; background: rgba(16,185,129,0.1); }
-        .info-card-title { font-weight: bold; margin-bottom: 8px; }
-        .info-card-content { font-size: 13px; color: #cbd5e1; line-height: 1.6; }
         
-        .stats-section {
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
-        .stat-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-        }
-        .stat-value { font-size: 28px; font-weight: bold; color: #f4a261; }
-        .stat-label { font-size: 13px; color: #94a3b8; margin-top: 5px; }
         
-        .disclaimer {
-            grid-column: 1 / -1;
-            padding: 15px 20px;
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            border-radius: 12px;
-            font-size: 13px;
-            color: #fbbf24;
-            text-align: center;
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #E0E0E0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #F5F5F5;
+            border: none;
+            font-size: 18px;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close:hover { background: #E0E0E0; }
+        
+        .modal-body {
+            padding: 20px 24px;
+        }
+        
+        .modal-body h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin: 16px 0 8px;
+        }
+        
+        .modal-body h3:first-child { margin-top: 0; }
+        
+        .modal-body p, .modal-body li {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .modal-body ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        
+        .modal-body li { margin: 4px 0; }
+        
+        /* ========== 隐藏调试元素 ========== */
+        .demo-controls, .info-section, .stats-section, .disclaimer,
+        .chat-header, .avatar, .badge, .online {
+            display: none !important;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🦎 守宫专业饲养顾问</h1>
-            <p>支持多品种守宫 | 豹纹·睫角·肥尾·瘤尾·日行</p>
-            <span class="badge">智能顾问在线</span>
+            <h1>守宫饲养顾问</h1>
+            <div class="header-status">
+                <span class="status-dot"></span>
+                <span>在线</span>
+            </div>
+            <button class="info-btn" onclick="showInfoModal()" title="查看功能介绍">ℹ️</button>
         </div>
         
         <div class="chat-section">
-            <div class="chat-header">
-                <div class="avatar">🤖</div>
-                <h3>守宫饲养专家</h3>
-                <span class="online">● 在线</span>
-            </div>
             <div class="chat-messages" id="chatMessages"></div>
             <div class="chat-input">
                 <div class="quick-replies" id="quickReplies"></div>
                 <div class="input-area">
-                    <input type="text" id="userInput" placeholder="输入您的问题..." onkeypress="if(event.key==='Enter')processUserInput()">
+                    <input type="text" id="userInput" placeholder="输入问题..." onkeypress="if(event.key==='Enter')processUserInput()">
                     <button onclick="processUserInput()">发送</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 信息模态框 -->
+    <div class="modal-overlay" id="infoModal" onclick="hideInfoModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2>关于守宫饲养顾问</h2>
+                <button class="modal-close" onclick="hideInfoModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <h3>👋 欢迎使用</h3>
+                <p>我是您的智能守宫饲养助手，可以回答关于守宫饲养的各种问题。</p>
+                
+                <h3>🦎 支持品种</h3>
+                <ul>
+                    <li>豹纹守宫 - 地栖型·食虫类</li>
+                    <li>睫角守宫 - 树栖型·杂食类</li>
+                    <li>肥尾守宫 - 地栖型·食虫类</li>
+                    <li>瘤尾守宫 - 地栖型·食虫类</li>
+                    <li>日行守宫 - 树栖型·食虫类</li>
+                </ul>
+                
+                <h3>💬 您可以问我</h3>
+                <ul>
+                    <li>"豹纹守宫不吃东西怎么办"（拒食诊断）</li>
+                    <li>"睫角守宫垫材用什么"（品种特定建议）</li>
+                    <li>"新手怎么准备"（购前指南）</li>
+                    <li>"守宫能活多久"（寿命咨询）</li>
+                </ul>
+                
+                <h3>⚠️ 免责声明</h3>
+                <p>AI辅助诊断仅供饲养参考，不能替代专业兽医诊疗。重症个体请及时就医。</p>
             </div>
         </div>
     </div>
@@ -3036,23 +3018,9 @@ ${speciesName === '豹纹守宫' || speciesName === '肥尾守宫' ? `
             const hasSession = loadSession();
             const speciesHint = currentSpecies ? `\n\n📌 **已记住您的偏好**：您养的是${currentSpecies}，涉及品种相关问题时我会直接基于此品种回答。` : '';
             
-            // 欢迎消息
+            // 欢迎消息（精简版）
             setTimeout(() => {
-                addMessage('ai', `<div class="msg-title">👋 欢迎使用守宫专业饲养顾问</div>
-我是您的智能饲养助手，支持豹纹守宫、睫角守宫、肥尾守宫、瘤尾守宫、日行守宫等多种品种的饲养咨询。
-
-**您可以问我：**
-• "豹纹守宫不吃东西怎么办"（拒食诊断）
-• "睫角守宫垫材用什么"（品种特定建议）
-• "瘤尾守宫可以用沙子吗"（沙栖品种指南）
-• "日行守宫需要UVB吗"（日行种光照）
-• "新手怎么准备"（购前指南）
-
-**支持品种：** 豹纹守宫 | 睫角守宫 | 肥尾守宫 | 瘤尾守宫 | 日行守宫
-
-⚠️ **重要提示**：涉及垫材、食物、UVB、湿度等问题时，我会先确认您的守宫品种，再给出准确建议。不同品种的饲养逻辑存在根本性差异！${speciesHint}
-
-或者直接点击上方测试按钮查看示例对话。`);
+                addMessage('ai', '👋 我是您的守宫饲养助手，有什么可以帮您？');
             }, 100);
             
             updateStats(currentSpecies || '-', '-');
@@ -3062,8 +3030,20 @@ ${speciesName === '豹纹守宫' || speciesName === '肥尾守宫' ? `
         function clearSpeciesMemory() {
             currentSpecies = null;
             localStorage.removeItem(userSessionKey);
-            addMessage('ai', '<div class="msg-title">🔄 品种记忆已清除</div>您可以重新告诉我您养的是什么品种的守宫。');
+            addMessage('ai', '🔄 品种记忆已清除，您可以重新告诉我您养的是什么品种的守宫。');
             updateStats('-', '-');
+        }
+        
+        // ========== 模态框控制 ==========
+        function showInfoModal() {
+            document.getElementById('infoModal').classList.add('active');
+        }
+        
+        function hideInfoModal(event) {
+            // 如果点击的是关闭按钮或遮罩层本身，则关闭
+            if (!event || event.target.id === 'infoModal' || event.target.classList.contains('modal-close')) {
+                document.getElementById('infoModal').classList.remove('active');
+            }
         }
         
         function switchTab(tab) {
