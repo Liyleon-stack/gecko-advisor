@@ -8,64 +8,183 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            min-height: 100vh;
-            color: #fff;
+            background: #f5f5f5;
+            height: 100vh;
+            color: #333;
+            overflow: hidden;
         }
         .container {
-            max-width: 1400px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
-        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } }
         
         .header {
-            grid-column: 1 / -1;
             text-align: center;
-            padding: 30px 20px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 20px;
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            flex-shrink: 0;
         }
         .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #f4a261, #e76f51);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: #2e7d32;
         }
-        .header p { color: #94a3b8; font-size: 14px; }
+        .header p { color: #666; font-size: 12px; }
         .badge {
             display: inline-block;
-            background: #e76f51;
+            background: #4caf50;
             color: #fff;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-top: 10px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-top: 5px;
         }
         
-        .demo-controls {
-            grid-column: 1 / -1;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
+        /* 隐藏调试元素 */
+        .demo-controls,
+        .info-section,
+        .stats-section {
+            display: none !important;
         }
-        .demo-btn {
-            padding: 10px 20px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            color: #fff;
-            cursor: pointer;
+        
+        .chat-section {
+            background: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+        .chat-header {
+            padding: 12px 16px;
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+        }
+        .chat-header h3 { font-size: 15px; color: #333; }
+        .online { font-size: 12px; color: #4caf50; margin-left: auto; }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            line-height: 1.6;
             font-size: 14px;
         }
-        .demo-btn:hover { background: rgba(255,255,255,0.2); }
-        .demo-btn.primary { background: linear-gradient(135deg, #f4a261, #e76f51); border: none; }
+        .message.user {
+            align-self: flex-end;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            color: #333;
+        }
+        .message.ai {
+            align-self: flex-start;
+            background: #e8f5e9;
+            color: #1b5e20;
+        }
+        .message.critical {
+            background: #ffebee;
+            border: 1px solid #ef5350;
+            color: #c62828;
+        }
+        .message.warning {
+            background: #fff3e0;
+            border: 1px solid #ff9800;
+            color: #e65100;
+        }
+        .msg-title { font-weight: bold; margin-bottom: 8px; font-size: 15px; }
+        .msg-section { margin: 8px 0; }
+        .msg-section-title { color: #2e7d32; font-weight: bold; }
+        
+        .chat-input {
+            padding: 12px 16px;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            flex-shrink: 0;
+        }
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .quick-btn {
+            padding: 6px 12px;
+            background: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 16px;
+            color: #2e7d32;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .quick-btn:hover { background: #c8e6c9; }
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        .input-area input {
+            flex: 1;
+            padding: 12px 16px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            color: #333;
+            font-size: 14px;
+            outline: none;
+        }
+        .input-area input:focus {
+            border-color: #4caf50;
+        }
+        .input-area button {
+            padding: 12px 24px;
+            background: #4caf50;
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .input-area button:hover { background: #43a047; }
+        
+        .info-section {
+            display: none;
+        }
+        .info-header {
+            display: none;
+        }
+        .info-tab {
+            display: none;
+        }
+        .stats-section {
+            display: none;
+        }
+        .stat-card {
+            display: none;
+        }
+        .disclaimer {
+            display: none;
+        }
         
         .chat-section {
             background: rgba(255,255,255,0.05);
@@ -251,71 +370,24 @@
     <div class="container">
         <div class="header">
             <h1>🦎 守宫专业饲养顾问</h1>
-            <p>智能诊断系统 v3.0 - 支持多品种守宫 | 豹纹·睫角·肥尾·瘤尾·日行</p>
-            <span class="badge">品种差异化知识库已加载</span>
-        </div>
-        
-        <div class="demo-controls">
-            <button class="demo-btn primary" onclick="testIntent('拒食')">测试：拒食</button>
-            <button class="demo-btn" onclick="testIntent('肠梗阻')">测试：肠梗阻</button>
-            <button class="demo-btn" onclick="testIntent('隐孢子虫')">测试：隐孢子虫</button>
-            <button class="demo-btn" onclick="testIntent('温度')">测试：温度</button>
-            <button class="demo-btn" onclick="testIntent('垫材')">测试：垫材</button>
-            <button class="demo-btn" onclick="testIntent('混养')">测试：混养</button>
-            <button class="demo-btn" onclick="testIntent('洗澡')">测试：洗澡</button>
-            <button class="demo-btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="testSpeciesIntent('垫材', '豹纹守宫')">🐆 豹纹垫材</button>
-            <button class="demo-btn" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);" onclick="testSpeciesIntent('垫材', '睫角守宫')">🦎 睫角垫材</button>
-            <button class="demo-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);" onclick="testSpeciesIntent('垫材', '瘤尾守宫')">🏜️ 瘤尾垫材</button>
-            <button class="demo-btn" onclick="resetChat()">🔄 重置对话</button>
-            <button class="demo-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626);" onclick="clearSpeciesMemory()">🗑️ 清除品种记忆</button>
+            <p>支持多品种守宫 | 豹纹·睫角·肥尾·瘤尾·日行</p>
+            <span class="badge">智能顾问在线</span>
         </div>
         
         <div class="chat-section">
             <div class="chat-header">
                 <div class="avatar">🤖</div>
-                <h3>豹纹守宫饲养专家AI</h3>
+                <h3>守宫饲养专家</h3>
                 <span class="online">● 在线</span>
             </div>
             <div class="chat-messages" id="chatMessages"></div>
             <div class="chat-input">
                 <div class="quick-replies" id="quickReplies"></div>
                 <div class="input-area">
-                    <input type="text" id="userInput" placeholder="输入您的问题，支持自然语言..." onkeypress="if(event.key==='Enter')processUserInput()">
+                    <input type="text" id="userInput" placeholder="输入您的问题..." onkeypress="if(event.key==='Enter')processUserInput()">
                     <button onclick="processUserInput()">发送</button>
                 </div>
             </div>
-        </div>
-        
-        <div class="info-section">
-            <div class="info-header">
-                <button class="info-tab active" onclick="switchTab('diagnosis')">诊断信息</button>
-                <button class="info-tab" onclick="switchTab('knowledge')">知识库</button>
-                <button class="info-tab" onclick="switchTab('history')">对话记录</button>
-            </div>
-            <div class="info-content" id="infoContent"></div>
-        </div>
-        
-        <div class="stats-section">
-            <div class="stat-card">
-                <div class="stat-value" id="intentMatch">-</div>
-                <div class="stat-label">识别意图</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="riskLevel">-</div>
-                <div class="stat-label">风险等级</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="queryCount">0</div>
-                <div class="stat-label">查询次数</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="kbCoverage">100%</div>
-                <div class="stat-label">知识覆盖</div>
-            </div>
-        </div>
-        
-        <div class="disclaimer">
-            ⚠️ 免责声明：AI辅助诊断仅供饲养参考，不能替代专业兽医诊疗。重症个体请及时就医。
         </div>
     </div>
 
@@ -2670,7 +2742,9 @@ ${speciesName === '豹纹守宫' || speciesName === '肥尾守宫' ? `
             
             div.innerHTML = formatted;
             container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
+            
+            // 平滑滚动到新消息的起始位置（确保用户首先看到回答开头）
+            div.scrollIntoView({ behavior: 'smooth', block: 'start' });
             
             // 记录历史
             conversationHistory.push({ type, text, time: new Date().toLocaleTimeString() });
@@ -2839,12 +2913,16 @@ ${speciesName === '豹纹守宫' || speciesName === '肥尾守宫' ? `
         }
         
         function updateStats(intent, risk) {
-            document.getElementById('intentMatch').textContent = intent || '-';
-            document.getElementById('riskLevel').textContent = risk || '-';
-            document.getElementById('queryCount').textContent = queryCount;
+            // 演示版：隐藏统计信息，保留函数结构
+            // document.getElementById('intentMatch').textContent = intent || '-';
+            // document.getElementById('riskLevel').textContent = risk || '-';
+            // document.getElementById('queryCount').textContent = queryCount;
         }
         
         function updateInfoPanel(intent, data, species = null) {
+            // 演示版：隐藏诊断信息面板，保留函数结构
+            return;
+            
             const container = document.getElementById('infoContent');
             
             let riskClass = '';
